@@ -1,0 +1,168 @@
+PROGRAMS :
+1) PROGRAM:
+
+#include <stdio.h>
+
+int* twoSum(int* nums, int numsSize, int target, int* returnSize) {
+    static int result[2];
+    for(int i = 0; i < numsSize; i++) {
+        for(int j = i + 1; j < numsSize; j++) {
+            if(nums[i] + nums[j] == target) {
+                result[0] = i;
+                result[1] = j;
+                *returnSize = 2;
+                return result;
+            }
+        }
+    }
+    *returnSize = 0;
+    return NULL;
+}
+
+int main() {
+    int nums[] = {2, 7, 11, 15};
+    int target = 9;
+    int returnSize;
+    int* result = twoSum(nums, 4, target, &returnSize);
+    if(result != NULL) {
+        printf("Indices: %d, %d\n", result[0], result[1]);
+    } else {
+        printf("No solution found.\n");
+    }
+    return 0;
+}
+
+
+2) PROGRAM:
+
+#include <stdio.h>
+
+int binarySearch(int arr[], int size, int target) {
+    int low = 0, high = size - 1;
+    while(low <= high) {
+        int mid = (low + high) / 2;
+        if(arr[mid] == target)
+            return mid;
+        else if(arr[mid] < target)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return -1; // Not found
+}
+
+int main() {
+    int arr[] = {1, 3, 5, 7, 9, 11};
+    int target = 7;
+    int result = binarySearch(arr, 6, target);
+    if(result != -1)
+        printf("Element found at index: %d\n", result);
+    else
+        printf("Element not found.\n");
+    return 0;
+}
+
+
+3) PROGRAM:
+
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+bool isAnagram(char *s1, char *s2) {
+    if (strlen(s1) != strlen(s2))
+        return false;
+
+    int count1[256] = {0}, count2[256] = {0};
+
+    for (int i = 0; s1[i] && s2[i]; i++) {
+        count1[(unsigned char)s1[i]]++;
+        count2[(unsigned char)s2[i]]++;
+    }
+
+    for (int i = 0; i < 256; i++) {
+        if (count1[i] != count2[i])
+            return false;
+    }
+
+    return true;
+}
+
+int main() {
+    char str1[] = "listen";
+    char str2[] = "silent";
+
+    if (isAnagram(str1, str2))
+        printf("The strings are anagrams.\n");
+    else
+        printf("The strings are not anagrams.\n");
+
+    return 0;
+}
+
+4) PROGRAM:
+
+#include <stdio.h>
+#include <string.h>
+
+int max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+int lengthOfLongestSubstring(char *s) {
+    int visited[256] = {0};
+    int left = 0, right = 0, maxLen = 0;
+
+    while (s[right]) {
+        if (visited[(unsigned char)s[right]] == 0) {
+            visited[(unsigned char)s[right]] = 1;
+            maxLen = max(maxLen, right - left + 1);
+            right++;
+        } else {
+            visited[(unsigned char)s[left]] = 0;
+            left++;
+        }
+    }
+
+    return maxLen;
+}
+
+int main() {
+    char str[] = "abcabcbb";
+    int result = lengthOfLongestSubstring(str);
+    printf("Length of longest substring without repeating characters: %d\n", result);
+    return 0;
+}
+
+
+5) PROGRAM:
+
+#include <stdio.h>
+#include <string.h>
+
+int count = 0;
+
+void expandAroundCenter(char *s, int left, int right) {
+    while (left >= 0 && right < strlen(s) && s[left] == s[right]) {
+        count++;
+        left--;
+        right++;
+    }
+}
+
+int countSubstrings(char *s) {
+    count = 0;
+    int n = strlen(s);
+    for (int i = 0; i < n; i++) {
+        expandAroundCenter(s, i, i);     // Odd-length palindromes
+        expandAroundCenter(s, i, i + 1); // Even-length palindromes
+    }
+    return count;
+}
+
+int main() {
+    char str[] = "abbaeae";
+    int result = countSubstrings(str);
+    printf("Total palindromic substrings: %d\n", result);
+    return 0;
+}
